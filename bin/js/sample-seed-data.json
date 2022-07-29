@@ -1,0 +1,547 @@
+{
+  "#Item Color Option": {
+    "data": {
+      "type": "ITEM_OPTION",
+      "id": "#Item Color Option",
+      "itemOptionData": {
+        "name": "COLOR_OPTIONS",
+        "values": [
+          {
+            "type": "ITEM_OPTION_VAL",
+            "id": "#item_option_value_color_red",
+            "itemOptionValueData": {
+              "name": "Red"
+            }
+          },
+          {
+            "type": "ITEM_OPTION_VAL",
+            "id": "#item_option_value_color_blue",
+            "itemOptionValueData": {
+              "name": "Blue"
+              }
+          }
+        ]
+      }
+    }
+  },
+  "#Item Size Option": {
+    "data": {
+      "type": "ITEM_OPTION",
+      "id": "#Item Size Option",
+      "itemOptionData": {
+        "name": "SIZE_OPTIONS",
+        "values": [
+          {
+            "type": "ITEM_OPTION_VAL",
+            "id": "#item_option_value_size_small",
+            "itemOptionValueData": {
+              "name": "Small"
+            }
+          },
+          {
+            "type": "ITEM_OPTION_VAL",
+            "id": "#item_option_value_size_medium",
+            "itemOptionValueData": {
+              "name": "Medium"
+            }
+          },
+          {
+            "type": "ITEM_OPTION_VAL",
+            "id": "#item_option_value_size_large",
+            "itemOptionValueData": {
+              "name": "Large"
+            }
+          }
+        ]
+    }
+  }
+},
+    "#Sales Tax": {
+      "data": {
+        "type": "TAX",
+        "id": "#Sales Tax",
+        "isDeleted": false,
+        "presentAtAllLocations": true,
+        "taxData": {
+          "name": "Sales Tax",
+          "calculationPhase": "TAX_TOTAL_PHASE",
+          "inclusionType": "ADDITIVE",
+          "percentage": "8.5",
+          "appliesToCustomAmounts": true,
+          "enabled": true
+        }
+      }
+    },
+    "Carbon Tax": {
+        "data":{
+        "type": "TAX",
+        "id": "#Carbon Tax",
+        "isDeleted": false,
+        "presentAtAllLocations": true,
+        "taxData": {
+            "name": "Carbon Tax",
+            "calculationPhase": "TAX_TOTAL_PHASE",
+            "inclusionType": "ADDITIVE",
+            "percentage": "8.5",
+            "appliesToCustomAmounts": true,
+            "enabled": true
+        }
+      }
+    },
+    "#Mugs": {
+      "data": {
+        "type": "CATEGORY",
+        "id": "#Mugs Category",
+        "presentAtAllLocations": true,
+        "categoryData": {
+          "name": "Mugs"
+        }
+      }
+    },
+    "#Decorative": {
+      "data": {
+        "type": "CATEGORY",
+        "id": "#Decorative Category",
+        "presentAtAllLocations": true,
+        "categoryData": {
+          "name": "Decorative"
+        }
+      }
+    },
+    "#Dishes": {
+        "data": {
+          "type": "CATEGORY",
+          "id": "#Dishes Category",
+          "presentAtAllLocations": true,
+          "categoryData": {
+            "name": "Dishes"
+          }
+        }
+      },
+    "#Watermelon Teapot": {
+      "image": {
+        "folder": "watermelon-teapot",
+        "url": "./bin/js/img/watermelon1.jpg",
+        "id": "#Watermelon Teapot",
+        "caption": "A picture of a watermelon teapot."
+      },
+      "data": {
+        "type": "ITEM",
+        "id": "#Watermelon Teapot",
+        "presentAtAllLocations": true,
+        "itemData": {
+          "name": "Watermelon Teapot",
+          "description": "A delightful addition to your Sunday picnic. This teapot perfectly holds the correct amount of water for brewing your favorite leaves.",
+          "categoryId": "#Dishes Category",
+          "variations": [{
+            "type": "ITEM_VARIATION",
+            "id": "#Regular Watermelon Teapot",
+            "isDeleted": false,
+            "presentAtAllLocations": true,
+            "itemVariationData": {
+              "itemId": "#Watermelon Teapot",
+              "name": "Regular",
+              "pricingType": "FIXED_PRICING",
+              "inventoryAlertType": "LOW_QUANTITY",
+              "inventoryAlertThreshold": 3,
+              "trackInventory": true,
+              "priceMoney": {
+                "amount": 7500,
+                "currency": "CURRENCY"
+              }
+            }
+          }],
+          "taxIds": [
+            "#Sales Tax",
+            "#Carbon Tax"
+          ]
+        }
+      }
+    },
+    "#Lucky Pots": {
+      "image": {
+        "folder": "lucky-pots",
+        "url": "./bin/js/img/luckypots1.jpg",
+        "id": "#Lucky Pots",
+        "caption": "A picture of lucky pots."
+      },
+      "data": {
+        "type": "ITEM",
+        "id": "#Lucky Pots",
+        "itemData": {
+          "name": "Lucky Pots",
+          "description": "Keep these pots on your desk to gain +3 luck to every roll initiative",
+          "categoryId": "#Decorative Category",
+          "variations": [
+            {
+                "type": "ITEM_VARIATION",
+                "id": "#lucky_pots_small_red",
+                "itemVariationData": {
+                    "pricingType": "FIXED_PRICING",
+                    "inventoryAlertType": "LOW_QUANTITY",
+                    "inventoryAlertThreshold": 4,      
+                    "trackInventory": true,
+                    "priceMoney": {
+                        "amount": 1000,
+                        "currency": "USD"
+                    },
+                    "itemOptionValues": [
+                        {
+                            "itemOptionId": "#Item Size Option",
+                            "itemOptionValueId": "#item_option_value_size_small"
+                        },
+                        {
+                            "itemOptionId": "#Item Color Option",
+                            "itemOptionValueId": "#item_option_value_color_red"
+                        }
+                    ]
+                }
+            },
+            {
+                "type": "ITEM_VARIATION",
+                "id": "#lucky_pots_medium_red",
+                "itemVariationData": {
+                    "pricingType": "FIXED_PRICING",
+                    "inventoryAlertType": "LOW_QUANTITY",
+                    "inventoryAlertThreshold": 3,      
+                    "trackInventory": true,
+                    "priceMoney": {
+                        "amount": 1500,
+                        "currency": "USD"
+                    },
+                    "itemOptionValues": [
+                        {
+                            "itemOptionId": "#Item Size Option",
+                            "itemOptionValueId": "#item_option_value_size_medium"
+                        },
+                        {
+                            "itemOptionId": "#Item Color Option",
+                            "itemOptionValueId": "#item_option_value_color_red"
+                        }
+                    ]
+                }
+            },
+            {
+                "type": "ITEM_VARIATION",
+                "id": "#lucky_pots_large_red",
+                "itemVariationData": {
+                    "pricingType": "FIXED_PRICING",
+                    "inventoryAlertType": "LOW_QUANTITY",
+                    "inventoryAlertThreshold": 5,
+                    "trackInventory": true,
+                    "priceMoney": {
+                        "amount": 2000,
+                        "currency": "USD"
+                    },
+                    "itemOptionValues": [
+                        {
+                            "itemOptionId": "#Item Size Option",
+                            "itemOptionValueId": "#item_option_value_size_large"
+                        },
+                        {
+                            "itemOptionId": "#Item Color Option",
+                            "itemOptionValueId": "#item_option_value_color_red"
+                        }
+                    ]
+                }
+            },
+            {
+                "type": "ITEM_VARIATION",
+                "id": "#lucky_pots_small_blue",
+                "itemVariationData": {
+                    "pricingType": "FIXED_PRICING",
+                    "inventoryAlertType": "LOW_QUANTITY",
+                    "inventoryAlertThreshold": 3,      
+                    "trackInventory": true,
+                    "priceMoney": {
+                        "amount": 1000,
+                        "currency": "USD"
+                    },
+                    "itemOptionValues": [
+                        {
+                            "itemOptionId": "#Item Size Option",
+                            "itemOptionValueId": "#item_option_value_size_small"
+                        },
+                        {
+                            "itemOptionId": "#Item Color Option",
+                            "itemOptionValueId": "#item_option_value_color_blue"
+                        }
+                    ]
+                }
+            },
+            {
+                "type": "ITEM_VARIATION",
+                "id": "#lucky_pots_medium_blue",
+                "itemVariationData": {
+                    "pricingType": "FIXED_PRICING",
+                    "inventoryAlertType": "LOW_QUANTITY",
+                    "inventoryAlertThreshold": 4,      
+                    "trackInventory": true,
+                    "priceMoney": {
+                        "amount": 1500,
+                        "currency": "USD"
+                    },
+                    "itemOptionValues": [
+                        {
+                            "itemOptionId": "#Item Size Option",
+                            "itemOptionValueId": "#item_option_value_size_medium"
+                        },
+                        {
+                            "itemOptionId": "#Item Color Option",
+                            "itemOptionValueId": "#item_option_value_color_blue"
+                        }
+                    ]
+                }
+            },
+            {
+                "type": "ITEM_VARIATION",
+                "id": "#lucky_pots_large_blue",
+                "itemVariationData": {
+                    "pricingType": "FIXED_PRICING",
+                    "inventoryAlertType": "LOW_QUANTITY",
+                    "inventoryAlertThreshold": 3,      
+                    "trackInventory": true,
+                    "priceMoney": {
+                        "amount": 2000,
+                        "currency": "USD"
+                    },
+                    "itemOptionValues": [
+                        {
+                            "itemOptionId": "#Item Size Option",
+                            "itemOptionValueId": "#item_option_value_size_large"
+                        },
+                        {
+                            "itemOptionId": "#Item Color Option",
+                            "itemOptionValueId": "#item_option_value_color_blue"
+                        }
+                    ]
+                }
+            }
+        ],
+        "productType": "REGULAR",
+        "itemOptions": [
+          {
+            "itemOptionId": "#Item Size Option"
+          },
+          {
+            "itemOptionId": "#Item Color Option"
+          }
+        ],
+          "taxIds": [
+            "#Sales Tax",
+            "#Carbon Tax"
+          ]
+        }
+      }
+    },
+    "#Scrambles": {
+      "image": {
+        "folder": "scrambles",
+        "url": "./bin/js/img/scrambles1.jpg",
+        "id": "#Scrambles",
+        "caption": "A picture of a plump sort"
+      },
+      "data": {
+        "type": "ITEM",
+        "id": "#Scrambles",
+        "itemData": {
+          "name": "Scrambles",
+          "description": "Plump sort required ahead. Scrambles is useful for storage of valuable items",
+          "categoryId": "#Decorative Category",
+          "variations": [
+            {
+              "type": "ITEM_VARIATION",
+              "id": "#scrambles_small",
+              "itemVariationData": {
+                  "pricingType": "FIXED_PRICING",
+                  "inventoryAlertType": "LOW_QUANTITY",
+                  "inventoryAlertThreshold": 5,    
+                  "trackInventory": true,
+                  "priceMoney": {
+                      "amount": 5000,
+                      "currency": "USD"
+                  },
+                  "itemOptionValues": [
+                      {
+                          "itemOptionId": "#Item Size Option",
+                          "itemOptionValueId": "#item_option_value_size_small"
+                      }
+                  ]
+              }
+          },
+          {
+              "type": "ITEM_VARIATION",
+              "id": "#scrambles_medium",
+              "itemVariationData": {
+                  "pricingType": "FIXED_PRICING",
+                  "inventoryAlertType": "LOW_QUANTITY",
+                  "inventoryAlertThreshold": 5,    
+                  "trackInventory": true,
+                  "priceMoney": {
+                      "amount": 7500,
+                      "currency": "USD"
+                  },
+                  "itemOptionValues": [
+                      {
+                          "itemOptionId": "#Item Size Option",
+                          "itemOptionValueId": "#item_option_value_size_medium"
+                      }
+                  ]
+              }
+          },
+          {
+              "type": "ITEM_VARIATION",
+              "id": "#scrambles_large_red",
+              "itemVariationData": {
+                  "pricingType": "FIXED_PRICING",
+                  "inventoryAlertType": "LOW_QUANTITY",
+                  "inventoryAlertThreshold": 5,    
+                  "trackInventory": true,
+                  "priceMoney": {
+                      "amount": 10000,
+                      "currency": "USD"
+                  },
+                  "itemOptionValues": [
+                      {
+                          "itemOptionId": "#Item Size Option",
+                          "itemOptionValueId": "#item_option_value_size_large"
+                      }
+                  ]
+              }
+          }
+          ],
+          "productType": "REGULAR",
+          "itemOptions": [
+            {
+              "itemOptionId": "#Item Size Option"
+            }
+          ],
+          "taxIds": [
+            "#Sales Tax",
+            "#Carbon Tax"
+          ]
+        }
+      }
+    },
+    "#Soup Bowls": {
+      "image": {
+        "folder": "bowls",
+        "url": "./bin/js/img/soupbowl1.jpg",
+        "id": "#Soup Bowls",
+        "caption": "A picture of soup bowls."
+      },
+      "data": {
+        "type": "ITEM",
+        "id": "#Soup Bowls",
+        "itemData": {
+          "name": "Soup Bowls",
+          "description": "Comes in a set of 2. These bowls will make an excellent addition to your soup collection",
+          "categoryId": "#Dishes Category",
+          "variations": [
+            {
+              "type": "ITEM_VARIATION",
+              "id": "#Regular Soup Bowls",
+              "isDeleted": false,
+              "presentAtAllLocations": true,
+              "itemVariationData": {
+                "inventoryAlertType": "LOW_QUANTITY",
+                "inventoryAlertThreshold": 5,  
+                "itemId": "#Soup Bowls",
+                "name": "Regular",
+                "pricingType": "FIXED_PRICING",
+                "trackInventory": true,
+                "priceMoney": {
+                  "amount": 5000,
+                  "currency": "CURRENCY"
+                }
+              }
+            }
+          ],
+          "taxIds": [
+            "#Sales Tax",
+            "#Carbon Tax"
+          ]
+        }
+      }
+    },
+    "#Elephant Mugs": {
+      "image": {
+        "folder": "elephant-mug",
+        "url": "./bin/js/img/elephantMug.jpg",
+        "id": "#Elephant Mugs",
+        "caption": "A picture of elephant mugs."
+      },
+      "data": {
+        "type": "ITEM",
+        "id": "#Elephant Mugs",
+        "itemData": {
+          "name": "Elephant Mugs",
+          "description": "Mugs made with the decorative effort of artist Kris Espanol.",
+          "categoryId": "#Mugs Category",
+          "variations": [{
+            "type": "ITEM_VARIATION",
+            "id": "#Regular Elephant Mugs",
+            "isDeleted": false,
+            "presentAtAllLocations": true,
+            "itemVariationData": {
+              "inventoryAlertType": "LOW_QUANTITY",
+              "inventoryAlertThreshold": 3,
+              "trackInventory": true,
+              "itemId": "#Elephant Mugs",
+              "name": "Regular",
+              "pricingType": "FIXED_PRICING",
+              "priceMoney": {
+                "amount": 3000,
+                "currency": "CURRENCY"
+              }
+            }
+          }],
+          "taxIds": [
+            "#Sales Tax",
+            "#Carbon Tax"
+          ]
+        }
+      }
+    },
+    "#Chess": {
+      "image": {
+        "folder": "chess",
+        "url": "./bin/js/img/chess1.jpg",
+        "id": "#Chess",
+        "caption": "A picture of a chess set"
+      },
+      "data": {
+        "type": "ITEM",
+        "id": "#Chess",
+        "itemData": {
+          "name": "Chess",
+          "description": "Custom chess set - with 32 hand crafted cermic pieces.",
+          "categoryId": "#Decorative Category",
+          "variations": [
+            {
+              "type": "ITEM_VARIATION",
+              "id": "#Regular Chess",
+              "isDeleted": false,
+              "presentAtAllLocations": true,
+              "itemVariationData": {
+                "inventoryAlertType": "LOW_QUANTITY",
+                "inventoryAlertThreshold": 5,
+                "trackInventory": true,
+                "itemId": "#Chess",
+                "name": "Regular",
+                "pricingType": "FIXED_PRICING",
+                "priceMoney": {
+                  "amount": 40000,
+                  "currency": "CURRENCY"
+                }
+              }
+            }
+          ],
+          "taxIds": [
+            "#Sales Tax",
+            "#Carbon Tax"
+          ]
+        }
+      }
+    }
+  }
