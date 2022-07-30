@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../../components/Layout'
-import { getInventory, getItem } from 'lib/pdp'
+import { getItem, ItemAndInventoryResponse } from 'lib/pdp'
 import RadioGroup from 'components/RadioGroup'
 import { getCatalogItems } from 'lib/catalog'
 import { CartCatalogObject, CartState } from 'Context/Context'
 import { Button, Toast } from 'react-bootstrap'
 import PhotoGallery from 'components/PhotoGallery'
-import { CatalogItem, CatalogObject, RetrieveCatalogObjectResponse } from 'square'
+import { BatchRetrieveInventoryCountsResponse, CatalogItem, CatalogObject } from 'square'
 import { InventoryInfo, ListCategoryResponse } from 'global/types'
 import { GetStaticPropsContext } from 'next'
 import { formatPrice } from 'util/utils'
@@ -15,8 +15,7 @@ interface PDPProps {
   object: CatalogObject
   itemData: CatalogItem
   relatedObjects: CatalogObject[]
-  inventory: InventoryInfo
-  
+  initialInventory: InventoryInfo
 }
 
 interface AvailabilityProps {
@@ -34,22 +33,24 @@ export interface RadioGroupOnChangeProps {
   
   
   export const Availability = ({ inventory, variationId }: AvailabilityProps) => {
-      if (inventory[variationId]?.quantity === 0) {
+      if (inventory?.[variationId]?.quantity === 0) {
           return <p className='font-sans text-red-500'>Sold Out</p>
-      } else if (inventory[variationId]?.quantity <= inventory[variationId]?.stock_thresh) {
-          return <p className='font-sans text-red-500'>Only {inventory[variationId].quantity} left!</p>
-      } else {
+      } else if (inventory?.[variationId]?.quantity <= inventory?.[variationId]?.stock_thresh) {
+          return <p className='font-sans text-red-500'>Only {inventory?.[variationId].quantity} left!</p>
+      } else if (inventory?.[variationId]){
         return <p className='font-sans text-green-500'>In Stock</p>
       }
   }
   
-  
-  const PDP = ({ object, itemData, relatedObjects, inventory }: PDPProps) => {
+
+  const PDP = ({ object, itemData, relatedObjects, initialInventory }: PDPProps) => {
+      console.log('what: ', initialInventory)
       const [checked, setChecked] = useState<number>(0)
       const [price, setPrice] = useState<bigint>(null)
       const [variationId, setVariationId] = useState<string>(null)
       const [variationName, setVariationName] = useState<string>(null)
       const [image, setImage] = useState({ url: '', name: '' })
+      const [inventory, setInventory] = useState<InventoryInfo>(null)
 
       const { state: { cart }, dispatch } = CartState()
       const onChange = ({ i, price, id, name }: RadioGroupOnChangeProps) => {
@@ -60,10 +61,30 @@ export interface RadioGroupOnChangeProps {
       }
       
       useEffect(() => {
+        const fetchData = async () => {
+          const inventoryResponse = await fetch('/api/inventory', {
+              method: 'POST',
+              headers: {
+                  'Content-type': 'application/json'
+              },
+              body: JSON.stringify({
+                  ids: itemData?.variations?.map(x => x.id),
+              })
+          })
+          const { counts } = await inventoryResponse.json() as BatchRetrieveInventoryCountsResponse
+  
+          const temp = counts.map(x => inventory[x.catalogObjectId].quantity = Number(x.quantity))
+          // TODO: something weird going on with updating the inventory count data
+          setInventory(temp)
+        }
+    
+        fetchData().catch(e=>{console.error(e)})
+  
+
           setPrice(itemData?.variations[checked]?.itemVariationData?.priceMoney?.amount)
           setVariationId(itemData?.variations[checked]?.id)
           setVariationName(itemData?.variations[checked]?.itemVariationData?.name)
-          relatedObjects.map((object)=> {
+          relatedObjects?.map((object)=> {
             if(object.type === 'IMAGE'){
                 setImage({ url: object?.imageData?.url, name: object?.imageData?.name })
             }
@@ -71,7 +92,7 @@ export interface RadioGroupOnChangeProps {
       }, [price, variationId])
 
       const limit = () => {
-        if (cart[variationId]?.qty === inventory[variationId]?.quantity){
+        if (cart[variationId]?.qty === inventory?.[variationId]?.quantity){
             return true
         } else 
         {
@@ -127,7 +148,7 @@ export interface RadioGroupOnChangeProps {
           onClick={onClick} 
           className='mb-2'
           variant='outline-secondary'
-          disabled={!inventory[variationId]?.quantity || limit()}
+          disabled={!inventory?.[variationId] || limit()}
         >
           Add to Cart
         </Button>
@@ -156,16 +177,19 @@ export async function getStaticProps(context:GetStaticPropsContext) {
     const { params } = context
     const id = params.id
     const res = await getItem(id as string)
-    const { object, object: { itemData }, relatedObjects } = JSON.parse(res) as RetrieveCatalogObjectResponse
-    const invRes = await getInventory(id as string)
-    const inventory = JSON.parse(invRes) as InventoryInfo
+    const {
+      catalogItemRes: { object },
+      catalogItemRes: { object: { itemData } },
+      catalogItemRes: { relatedObjects },
+      inventory
+     } = JSON.parse(res) as ItemAndInventoryResponse
     return {
-        props: {
-            itemData,
-            object,
-            relatedObjects,
-            inventory
-        }
+         props: {
+             itemData,
+             object,
+             relatedObjects,
+             initialInventory: inventory
+         }
     }
 }
 

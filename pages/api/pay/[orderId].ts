@@ -43,8 +43,10 @@ export default async function handler(req: ExtendedNextApiRequest, res: NextApiR
             idempotencyKey: randomUUID()
           })
         if (!result.errors) {
+            console.log('the result: ', result)
             res.status(200).json(result)
         } else {
+            console.log('shoot: ', result)
             res.status(Number(result?.errors[0]?.code)).json(result.errors)
         }
     } else {

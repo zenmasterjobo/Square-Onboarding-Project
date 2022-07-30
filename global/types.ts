@@ -49,3 +49,8 @@ export interface ShippingInformation {
 }
 
 export type InputEventType = React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>
+
+export interface InventoryObjectMap {
+    [key:string]: number
+  }
+  

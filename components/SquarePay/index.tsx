@@ -20,7 +20,7 @@ const SquarePay = ({ orderId, priceTotal, userInfo }:SquarePayProps) => {
             locationId='LHJ1ZXJ8YSV8W'
             cardTokenizeResponseReceived={ (token) => {
                 (async () => {
-                    await fetch (`/api/order/${orderId}`, {
+                    await fetch (`/api/pay/${orderId}`, {
                         method: 'PUT',
                         headers: {
                             'Content-type': 'application/json'

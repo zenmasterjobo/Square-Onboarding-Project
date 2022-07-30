@@ -1,3 +1,4 @@
+import { InventoryObjectMap } from 'global/types'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { Button, Col, Form, Image, ListGroup, Row } from 'react-bootstrap'
@@ -5,10 +6,6 @@ import { AiFillDelete } from 'react-icons/ai'
 import { BatchRetrieveInventoryCountsResponse } from 'square'
 import { formatPrice, getTotal } from 'util/utils'
 import { CartState } from '../Context/Context'
-
-interface InventoryObjectMap {
-  [key:string]: number
-}
 
 const Cart = () => {
   const {
