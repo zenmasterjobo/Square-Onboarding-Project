@@ -18,7 +18,7 @@ export async function getItem(id:string): Promise<string> {
     const inventory:InventoryInfo = {}
     catalogItemReq?.result?.object?.itemData?.variations.forEach(variation =>{
         inventory[variation.id] = {
-            quantity: 0,
+            quantity: null,
             stock_thresh: null
         }
         inventory[variation.id].stock_thresh = Number(variation?.itemVariationData?.inventoryAlertThreshold)

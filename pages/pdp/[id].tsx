@@ -33,6 +33,9 @@ export interface RadioGroupOnChangeProps {
   
   
   export const Availability = ({ inventory, variationId }: AvailabilityProps) => {
+      if (inventory?.[variationId]?.quantity === null) {
+        return
+      }
       if (inventory?.[variationId]?.quantity === 0) {
           return <p className='font-sans text-red-500'>Sold Out</p>
       } else if (inventory?.[variationId]?.quantity <= inventory?.[variationId]?.stock_thresh) {
@@ -44,13 +47,14 @@ export interface RadioGroupOnChangeProps {
   
 
   const PDP = ({ object, itemData, relatedObjects, initialInventory }: PDPProps) => {
-      console.log('what: ', initialInventory)
       const [checked, setChecked] = useState<number>(0)
       const [price, setPrice] = useState<bigint>(null)
       const [variationId, setVariationId] = useState<string>(null)
       const [variationName, setVariationName] = useState<string>(null)
       const [image, setImage] = useState({ url: '', name: '' })
-      const [inventory, setInventory] = useState<InventoryInfo>(null)
+      const [inventory, setInventory] = useState<InventoryInfo>(initialInventory)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const [_, setCount] = useState<number[]>([])
 
       const { state: { cart }, dispatch } = CartState()
       const onChange = ({ i, price, id, name }: RadioGroupOnChangeProps) => {
@@ -59,7 +63,7 @@ export interface RadioGroupOnChangeProps {
           setVariationId(id)
           setVariationName(name)
       }
-      
+
       useEffect(() => {
         const fetchData = async () => {
           const inventoryResponse = await fetch('/api/inventory', {
@@ -72,14 +76,19 @@ export interface RadioGroupOnChangeProps {
               })
           })
           const { counts } = await inventoryResponse.json() as BatchRetrieveInventoryCountsResponse
-  
-          const temp = counts.map(x => inventory[x.catalogObjectId].quantity = Number(x.quantity))
+
+          const temp:InventoryInfo = inventory
+
+          const tracker = counts.map(x => {
+            temp[x.catalogObjectId].quantity = Number(x.quantity)
+            return Number(x.quantity)
+          })
+
           // TODO: something weird going on with updating the inventory count data
           setInventory(temp)
+          setCount(tracker)
         }
-    
         fetchData().catch(e=>{console.error(e)})
-  
 
           setPrice(itemData?.variations[checked]?.itemVariationData?.priceMoney?.amount)
           setVariationId(itemData?.variations[checked]?.id)
@@ -89,7 +98,7 @@ export interface RadioGroupOnChangeProps {
                 setImage({ url: object?.imageData?.url, name: object?.imageData?.name })
             }
         })
-      }, [price, variationId])
+      }, [price, variationId, inventory])
 
       const limit = () => {
         if (cart[variationId]?.qty === inventory?.[variationId]?.quantity){
@@ -148,7 +157,7 @@ export interface RadioGroupOnChangeProps {
           onClick={onClick} 
           className='mb-2'
           variant='outline-secondary'
-          disabled={!inventory?.[variationId] || limit()}
+          disabled={!inventory?.[variationId]?.quantity || limit()}
         >
           Add to Cart
         </Button>
