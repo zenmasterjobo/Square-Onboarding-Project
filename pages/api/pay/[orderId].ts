@@ -16,7 +16,12 @@ interface ExtendedNextApiRequest extends NextApiRequest {
 export default async function handler(req: ExtendedNextApiRequest, res: NextApiResponse<UpdateOrderResponse | Error[] | {error: string}>) {
     if (req.method === 'PUT') {
         const { orderId } = req.query
-        const { result } = await ordersApi.updateOrder(orderId[0],
+        if (Array.isArray(orderId)) { 
+          console.error('provided request was an array')
+          return 
+        }
+        const { result: { order: { version } } } = await ordersApi.retrieveOrder(orderId)
+        const { result } = await ordersApi.updateOrder(orderId,
           {
             order: {
               locationId: 'LHJ1ZXJ8YSV8W',
@@ -38,7 +43,7 @@ export default async function handler(req: ExtendedNextApiRequest, res: NextApiR
                   }
                 }
               ],
-              version: 1
+              version
             },
             idempotencyKey: randomUUID()
           })

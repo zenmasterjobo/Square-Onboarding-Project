@@ -10,6 +10,7 @@ import { BatchRetrieveInventoryCountsResponse, CatalogItem, CatalogObject } from
 import { InventoryInfo, ListCategoryResponse } from 'global/types'
 import { GetStaticPropsContext } from 'next'
 import { formatPrice } from 'util/utils'
+import ReactSpinner from 'components/Spinner'
 
 interface PDPProps {
   object: CatalogObject
@@ -21,6 +22,7 @@ interface PDPProps {
 interface AvailabilityProps {
   inventory: InventoryInfo
   variationId: string
+  isLoaded: boolean
 }
 
 
@@ -32,9 +34,9 @@ export interface RadioGroupOnChangeProps {
   }
   
   
-  export const Availability = ({ inventory, variationId }: AvailabilityProps) => {
-      if (inventory?.[variationId]?.quantity === null) {
-        return
+  export const Availability = ({ inventory, variationId, isLoaded }: AvailabilityProps) => {
+      if (!isLoaded) {
+        return <ReactSpinner/>
       }
       if (inventory?.[variationId]?.quantity === 0) {
           return <p className='font-sans text-red-500'>Sold Out</p>
@@ -53,8 +55,8 @@ export interface RadioGroupOnChangeProps {
       const [variationName, setVariationName] = useState<string>(null)
       const [image, setImage] = useState({ url: '', name: '' })
       const [inventory, setInventory] = useState<InventoryInfo>(initialInventory)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const [_, setCount] = useState<number[]>([])
+      const [isLoaded, setIsLoaded] = useState<boolean>(false)
+
 
       const { state: { cart }, dispatch } = CartState()
       const onChange = ({ i, price, id, name }: RadioGroupOnChangeProps) => {
@@ -66,27 +68,28 @@ export interface RadioGroupOnChangeProps {
 
       useEffect(() => {
         const fetchData = async () => {
-          const inventoryResponse = await fetch('/api/inventory', {
-              method: 'POST',
-              headers: {
-                  'Content-type': 'application/json'
-              },
-              body: JSON.stringify({
-                  ids: itemData?.variations?.map(x => x.id),
-              })
-          })
-          const { counts } = await inventoryResponse.json() as BatchRetrieveInventoryCountsResponse
+          if (!isLoaded) {
+            const inventoryResponse = await fetch('/api/inventory', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ids: itemData?.variations?.map(x => x.id),
+                })
+            })
+            const { counts } = await inventoryResponse.json() as BatchRetrieveInventoryCountsResponse
 
-          const temp:InventoryInfo = inventory
+            const temp:InventoryInfo = inventory
 
-          const tracker = counts.map(x => {
-            temp[x.catalogObjectId].quantity = Number(x.quantity)
-            return Number(x.quantity)
-          })
+            counts.forEach(x => {
+              temp[x.catalogObjectId].quantity = Number(x.quantity)
+              return Number(x.quantity)
+            })
 
-          // TODO: something weird going on with updating the inventory count data
-          setInventory(temp)
-          setCount(tracker)
+            setInventory(temp)
+            setIsLoaded(true)
+          }
         }
         fetchData().catch(e=>{console.error(e)})
 
@@ -145,7 +148,7 @@ export interface RadioGroupOnChangeProps {
                 <fieldset>
                     <legend>Style</legend>
                         <div className='max-w-sm -mt-6'>
-                      <RadioGroup variations={itemData.variations} checked={checked} onChange={onChange} inventory={inventory}/>
+                      <RadioGroup variations={itemData.variations} checked={checked} onChange={onChange} inventory={inventory} isLoaded={isLoaded}/>
                       </div>
                 </fieldset>          
             }

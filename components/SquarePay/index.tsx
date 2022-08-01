@@ -32,7 +32,7 @@ const SquarePay = ({ orderId, priceTotal, userInfo }:SquarePayProps) => {
 
                     // Create our Payment using the Order
                     // Probably should condense both of these into one endpoint that does it
-                    const response = await fetch ('/api/pay', {
+                    await fetch ('/api/pay', {
                         method: 'POST',
                         headers: {
                             'Content-type': 'application/json'
@@ -44,7 +44,6 @@ const SquarePay = ({ orderId, priceTotal, userInfo }:SquarePayProps) => {
                         })
                     })
                     
-                    await response.json()
                     await router.push('/complete').catch(e=>console.error(e))
                     dispatch({
                         type: 'CLEAR_CART',

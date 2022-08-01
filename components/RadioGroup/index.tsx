@@ -7,9 +7,10 @@ interface RadioGroupProps {
     checked: number
     onChange: (data: RadioGroupOnChangeProps, e: React.ChangeEvent<HTMLInputElement>) => void
     inventory: InventoryInfo
+    isLoaded: boolean
 }
 
-const RadioGroup = ({ variations, checked, onChange, inventory }: RadioGroupProps) => {
+const RadioGroup = ({ variations, checked, onChange, inventory, isLoaded }: RadioGroupProps) => {
     return <div className='flex flex-col mb-4'>
       <div className='flex mt-4 flex-wrap'>
     {
@@ -31,7 +32,7 @@ const RadioGroup = ({ variations, checked, onChange, inventory }: RadioGroupProp
                     value={variation?.id} />
                 <label htmlFor={variation.id} className='flex flex-col p-2 bg-white border border-gray-300 rounded-lg cursor-pointer focus:outline-none hover:bg-gray-50 peer-checked:ring-green-500 peer-checked:ring-2 peer-checked:border-red'>
                     {variation?.itemVariationData?.name}
-                    <Availability inventory={inventory} variationId={variation.id}/>
+                    <Availability inventory={inventory} variationId={variation.id} isLoaded={isLoaded}/>
                 </label>
             </div>
             )
